@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var sass = require('gulp-sass');
 var nodemon = require('gulp-nodemon');
 var jsFiles = ['*.js', './src/**/*.js'];
 
