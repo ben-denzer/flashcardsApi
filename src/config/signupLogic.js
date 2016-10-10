@@ -19,7 +19,7 @@ const signup = (req, connection, cb) => {
 
                     let newUser = {
                         username,
-                        id: rows.insertId,
+                        user_id: rows.insertId,
                     };
 
                     req.login(newUser, (err) => {

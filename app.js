@@ -1,14 +1,14 @@
 const express           = require('express');
 const app               = express();
-const port              = process.env.PORT || 3000;
+const port              = process.env.PORT || 8001;
 const dbinfo            = require('./.dbinfo');
 const mysql             = require('mysql');
 const connection        = mysql.createConnection(dbinfo);
 const passportConfig    = require('./src/config/passportConfig');
 passportConfig(app, connection);
-const morgan            = require('morgan');
+//const morgan            = require('morgan');
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
