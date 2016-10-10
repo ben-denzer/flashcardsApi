@@ -27,7 +27,11 @@ const login = (connection) => {
 
                         bcrypt.compare(password, rows[0].password, (err, res) => {
                             if (err) return cb({error: 'bcrypt error'});
-                            res ? cb(null, jwt.sign(user, jwtSecret, {})) : cb(null, false);
+                            if (res) {
+                                cb(null, {token: jwt.sign(user, jwtSecret, {}), coins: user.coins});
+                            } else {
+                                cb(null, false);
+                            }
                         });
                     }
                 );

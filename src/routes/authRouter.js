@@ -12,7 +12,7 @@ const router = (connection) => {
         signupLogic(req, connection, (err, token) => {
             if (err) return res.status(500).send(err);
             if (token.error === 'username is taken') return res.status(403).send({error: 'username is taken'});
-            res.status(200).send(token);
+            res.status(200).send(JSON.stringify({token}));
         });
     });
 
@@ -27,7 +27,7 @@ const router = (connection) => {
                 [user.user_id],
                 (err, rows) => {
                     if (err) return res.status(500).send();
-                    res.status(200).send(JSON.stringify(Object.assign({}, user, {coins: rows[0].coins})));
+                    res.status(200).send(JSON.stringify({username: user.username, coins: rows[0].coins}));
                 }
             );
         });
