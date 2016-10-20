@@ -6,6 +6,7 @@ const authRouter        = express.Router();
 const passport          = require('passport');
 const jwt               = require('jsonwebtoken');
 const jwtInfo           = require('../../.jwtinfo').key;
+const passwordReset     = require('../services/passwordReset');
 
 const router = (connection) => {
     authRouter.post('/signup', jsonParser, (req, res) => {
@@ -35,6 +36,15 @@ const router = (connection) => {
                     }));
                 }
             );
+        });
+    });
+
+    authRouter.post('/resetPassword', jsonParser, (req, res) => {
+        passwordReset(req.body.email, (err, data) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            res.status(200).send({success: 'email sent', data});
         });
     });
 
