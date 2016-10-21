@@ -6,14 +6,15 @@ const jwtSecret = require('../../.jwtinfo').key;
 const signup = (req, connection, cb) => {
     const username = req.body.username;
     const password = req.body.password;
+    const email = req.body.email || null;
 
     const success = () => {
         bcrypt.hash(password, 10, (err, hash) => {
             if (err) return cb({error: 'hashing error'});
 
             connection.query(
-                'INSERT INTO users(username, password) VALUES(?,?)',
-                [username, hash],
+                'INSERT INTO users(username, password, email) VALUES(?,?,?)',
+                [username, hash, email],
                 (err, rows) => {
                     if (err) return cb({error: 'db error'});
 
@@ -25,7 +26,7 @@ const signup = (req, connection, cb) => {
                     req.login(newUser, (err) => {
                         if (err) return cb({error: 'passport error'});
                         cb(null, jwt.sign(Object.assign({}, newUser, {coins: 0}), jwtSecret, {}));
-                    })
+                    });
                 }
             );
         });

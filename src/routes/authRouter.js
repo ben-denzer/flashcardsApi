@@ -6,7 +6,7 @@ const authRouter        = express.Router();
 const passport          = require('passport');
 const jwt               = require('jsonwebtoken');
 const jwtInfo           = require('../../.jwtinfo').key;
-const passwordReset     = require('../services/passwordReset');
+const sendPasswordReset     = require('../services/sendPasswordReset');
 
 const router = (connection) => {
     authRouter.post('/signup', jsonParser, (req, res) => {
@@ -40,13 +40,22 @@ const router = (connection) => {
     });
 
     authRouter.post('/resetPassword', jsonParser, (req, res) => {
-        passwordReset(req.body.email, (err, data) => {
+        sendPasswordReset(req.body.email, (err, data) => {
             if (err) {
                 return res.status(500).send(err);
             }
             res.status(200).send({success: 'email sent', data});
         });
     });
+
+    // authRouter.('/reset/:token', (req, res, next) => {
+    //     const token = req.params.token;
+    //     jwt.verify(req.params.token, jwtInfo, (err, user) => {
+    //         if (err || !user) return res.status(403).send({error: unauthorized});
+
+    //     });
+
+    // });
 
     return authRouter;
 };
