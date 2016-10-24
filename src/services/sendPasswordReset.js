@@ -12,7 +12,7 @@ const auth = {
 }
 
 const sendMail = (email, cb) => {
-    const token = jwt.sign({email}, jwtInfo, {expiresIn: '5m'}, (err, token) => {
+    const token = jwt.sign({email}, jwtInfo, {expiresIn: '10m'}, (err, token) => {
         const nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
         nodemailerMailgun.sendMail({
@@ -27,6 +27,7 @@ const sendMail = (email, cb) => {
                     cb(err);
                 }
                 else {
+                    console.log(token);
                     cb(null, info);
                 }
             }

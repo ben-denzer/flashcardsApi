@@ -7,6 +7,7 @@ const passport          = require('passport');
 const jwt               = require('jsonwebtoken');
 const jwtInfo           = require('../../.jwtinfo').key;
 const sendPasswordReset     = require('../services/sendPasswordReset');
+const resetPw           = require('../services/resetPw');
 
 const router = (connection) => {
     authRouter.post('/signup', jsonParser, (req, res) => {
@@ -27,7 +28,6 @@ const router = (connection) => {
             connection.query('SELECT u.coins, u.username FROM users u WHERE u.user_id=?',
                 [user.user_id],
                 (err, rows) => {
-                    if (err) console.log(err);
                     if (err) return res.status(500).send();
                     res.status(200).send(JSON.stringify({
                         username: rows[0].username,
@@ -48,14 +48,16 @@ const router = (connection) => {
         });
     });
 
-    // authRouter.('/reset/:token', (req, res, next) => {
-    //     const token = req.params.token;
-    //     jwt.verify(req.params.token, jwtInfo, (err, user) => {
-    //         if (err || !user) return res.status(403).send({error: unauthorized});
-
-    //     });
-
-    // });
+    authRouter.post('/reset/:token', jsonParser, (req, res) => {
+        const token = req.params.token;
+        jwt.verify(req.params.token, jwtInfo, (err, user) => {
+            if (err || !user) return res.status(403).send({error: 'unauthorized'});
+            resetPw(req, connection, (err, data) => {
+                if (err) return res.status(500).send(err);
+                res.status(200).send(data);
+            });
+        });
+    });
 
     return authRouter;
 };
