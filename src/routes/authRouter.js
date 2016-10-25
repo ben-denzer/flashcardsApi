@@ -40,7 +40,7 @@ const router = (connection) => {
     });
 
     authRouter.post('/resetPassword', jsonParser, (req, res) => {
-        sendPasswordReset(req.body.email, (err, data) => {
+        sendPasswordReset(req.body.email, connection, (err, data) => {
             if (err) {
                 return res.status(500).send(err);
             }
